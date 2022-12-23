@@ -18,4 +18,12 @@ export class PostsService {
   getAll(): Promise<Post[]> {
     return this.postsRepository.find();
   }
+
+  getOne(id: number): Promise<Post> {
+    return this.postsRepository.findOne({
+      where: {
+        id: id,
+      },
+    });
+  }
 }
