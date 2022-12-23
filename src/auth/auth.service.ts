@@ -1,7 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { User } from 'src/users/entities/user.entity';
 import { UsersService } from 'src/users/users.service';
-import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
@@ -29,22 +28,22 @@ export class AuthService {
     return this.usersService.create(registerDto);
   }
 
-  async login(loginDto: LoginDto): Promise<LoginResponse> {
+  async validateUser(email: string, password: string): Promise<User> {
     const foundUser = await this.usersService.findOneByOption({
       where: {
-        email: loginDto.email,
+        email: email,
       },
     });
 
-    if (!foundUser) {
-      throw new BadRequestException('존재하지 않는 이메일입니다.');
+    if (foundUser && bcrypt.compareSync(password, foundUser.password)) {
+      return foundUser;
     }
 
-    if (!bcrypt.compareSync(loginDto.password, foundUser.password)) {
-      throw new BadRequestException('비밀번호가 잘못됐습니다.');
-    }
+    return null;
+  }
 
-    const payload = { id: foundUser.id, email: foundUser.email };
+  login(user: User): LoginResponse {
+    const payload = { id: user.id, email: user.email };
     return {
       accessToken: this.jwtService.sign(payload),
     };
