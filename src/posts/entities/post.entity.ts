@@ -11,6 +11,6 @@ export class Post {
   @Column()
   content: string;
 
-  @Column()
+  @Column({ name: 'view_count', default: 0 })
   viewCount: number;
 }

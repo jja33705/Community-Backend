@@ -5,7 +5,7 @@ import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
-import { LoginResponseInterface } from './interfaces/login-response.interface';
+import { LoginResponse } from './interfaces/login-response.interface';
 
 @Injectable()
 export class AuthService {
@@ -29,7 +29,7 @@ export class AuthService {
     return this.usersService.create(registerDto);
   }
 
-  async login(loginDto: LoginDto): Promise<LoginResponseInterface> {
+  async login(loginDto: LoginDto): Promise<LoginResponse> {
     const foundUser = await this.usersService.findOneByOption({
       where: {
         email: loginDto.email,
