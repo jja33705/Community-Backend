@@ -24,8 +24,7 @@ export class PostsController {
     @Request() req,
     @Body() createPostDto: CreatePostDto,
   ): Promise<PostEntity> {
-    console.log(req.user);
-    return this.postsService.create(createPostDto);
+    return this.postsService.create(req.user.id, createPostDto);
   }
 
   @Get()
@@ -35,7 +34,6 @@ export class PostsController {
 
   @Get(':id')
   getOne(@Param() { id }: GetOneParamsDto) {
-    console.log(typeof id);
     return this.postsService.getOne(id);
   }
 

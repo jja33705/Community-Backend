@@ -3,16 +3,26 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreatePostDto } from './dto/create-post.dto';
 import { Post } from './entities/post.entity';
+import { UsersService } from '../users/users.service';
 
 @Injectable()
 export class PostsService {
   constructor(
     @InjectRepository(Post)
     private postsRepository: Repository<Post>,
+    private usersService: UsersService,
   ) {}
 
-  create(createPostDto: CreatePostDto): Promise<Post> {
-    return this.postsRepository.save(createPostDto);
+  async create(userId: number, createPostDto: CreatePostDto): Promise<Post> {
+    const user = await this.usersService.findOneByOption({
+      where: {
+        id: userId,
+      },
+    });
+
+    const newPost = { ...createPostDto, user };
+
+    return this.postsRepository.save(newPost);
   }
 
   getAll(): Promise<Post[]> {
