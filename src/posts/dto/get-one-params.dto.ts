@@ -1,6 +1,8 @@
-import { IsNumberString } from 'class-validator';
+import { Type } from 'class-transformer';
+import { IsNumber } from 'class-validator';
 
 export class GetOneParamsDto {
-  @IsNumberString()
+  @IsNumber()
+  @Type(() => Number)
   id: number;
 }

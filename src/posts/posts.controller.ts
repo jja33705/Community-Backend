@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Put,
+  UseGuards,
+} from '@nestjs/common';
 import { CreatePostDto } from './dto/create-post.dto';
 import { PostsService } from './posts.service';
 import { Post as PostEntity } from './entities/post.entity';
@@ -22,6 +30,10 @@ export class PostsController {
 
   @Get(':id')
   getOne(@Param() { id }: GetOneParamsDto) {
+    console.log(typeof id);
     return this.postsService.getOne(id);
   }
+
+  // @Put(':id')
+  // update(@Param('id') id: number)
 }
